@@ -25,7 +25,7 @@ describe Manhattan do
     box.should respond_to(:unopened?)
   end
 
-  it "sets asign new status" do
+  it "sets a new status" do
     box.mark_as_opened
     box.status.should == "opened"
   end
