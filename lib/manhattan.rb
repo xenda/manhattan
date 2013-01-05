@@ -34,6 +34,7 @@ module Manhattan
     query                      = "#{status}?".to_sym
     negative_query             = "not_#{query}".to_sym
     alternative_negative_query = "un#{query}".to_sym
+    alternate_negative_query = "in#{query}".to_sym
 
     define_method query do
       self.status == self.class.status(status.to_sym)
@@ -43,6 +44,7 @@ module Manhattan
       !self.send(query)
     end
     alias_method alternative_negative_query, negative_query
+    alias_method alternate_negative_query, negative_query
   end
 
   def define_mark_method(status)
