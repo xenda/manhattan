@@ -1,6 +1,6 @@
 # Manhattan
 
-Manhattan (based on the Watchmen character of Doctor Manhattan) is a gem extracted from the practices we used at [Xenda](http://xenda.pe "Xenda") in the development of our projects.
+Manhattan is a gem extracted from the practices we used at [Xenda](http://xenda.pe "Xenda") in the development of our projects.
 
 It strives to be a simple status manager for models with minimal overhead and allowing the creation of a simple state machine. Most projects in our experience need for a model to hold a status at once and to perform some actions before or after obtaining that state. This gem simplifies that work without adding much overhead.
 
