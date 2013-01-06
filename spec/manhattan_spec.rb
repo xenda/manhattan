@@ -9,6 +9,10 @@ describe Manhattan do
     box.statuses.count.should be(3)
   end
 
+  it "starts with an empty status" do
+    box.status.should be_nil
+  end
+
   it "lists statuses" do
     MysteryBox.statuses.should eq(["opened", "closed", "glowing"])
   end
@@ -65,6 +69,10 @@ describe Manhattan do
   describe "when using alternate columns" do
     it "takes the alternate column" do
       empty_box.mark_as_opened
+      empty_box.state.should eq("opened")
+    end
+
+    it "starts with the default state" do
       empty_box.state.should eq("opened")
     end
   end

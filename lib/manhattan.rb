@@ -16,19 +16,36 @@ module Manhattan
     self.class.statuses
   end
 
+  def status_write_method
+    "#{self.class.status_column_name}="
+  end
+
+  def default_status_value
+    self.class.default_status_value
+  end
+
   def send_if_exists(method)
     self.send(method) if self.respond_to? method
   end
 
+  def set_default_value
+    self.send(status_write_method, status_value(default_status_value)) unless self.status_column_value
+  end
+
   module ClassMethods
 
-    attr_accessor :status_column_name
+    attr_accessor :status_column_name, :default_status_value
 
-    def has_statuses(*statuses, options)
-      @status_column_name = options[:column_name].to_sym
+    def has_statuses(*statuses)
+      options = statuses.pop if statuses.last.is_a? Hash
+      options ||= {}
+      @status_column_name = options[:column_name]
       @status_column_name ||= :status
 
+      @default_status_value = options[:default_value]
       @statuses_names = localize_names(statuses)
+
+      after_initialize :set_default_value
 
       statuses.each_with_index do |status, index|
         add_to_statuses_hash(status, index)
@@ -92,7 +109,7 @@ module Manhattan
 
       define_method marking_name do
         send_if_exists(before_marking)
-        self.send("#{self.class.status_column_name}=",self.class.status(status))
+        self.send(status_write_method,self.class.status(status))
         self.save
         send_if_exists(after_marking)
       end
