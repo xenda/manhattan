@@ -38,16 +38,18 @@ module Manhattan
     attr_accessor :status_column_name, :default_status_value
 
     def has_statuses(*statuses)
-      options = statuses.pop if statuses.last.is_a? Hash
-      options ||= {}
+      arguments = statuses.pop if statuses.last.is_a? Hash
+      arguments ||= {}
+
+      options = { column_name: :status }
+      options.merge! arguments
 
       common_methods = statuses & self.methods
       raise Manhattan::AlreadyDefinedMethod, "Already defined method #{common_methods}" unless common_methods.empty?
 
       @status_column_name = options[:column_name]
-      @status_column_name ||= :status
-
       @default_status_value = options[:default_value]
+
       @statuses_names = localize_names(statuses)
 
       after_initialize :set_default_value
