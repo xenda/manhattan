@@ -3,6 +3,7 @@ require "manhattan/version"
 module Manhattan
 
   extend ActiveSupport::Concern
+  class AlreadyDefinedMethod < StandardError; end
 
   def status_column_value
     self.send(self.class.status_column_name)
@@ -39,6 +40,10 @@ module Manhattan
     def has_statuses(*statuses)
       options = statuses.pop if statuses.last.is_a? Hash
       options ||= {}
+
+      common_methods = statuses & self.methods
+      raise Manhattan::AlreadyDefinedMethod, "Already defined method #{common_methods}" unless common_methods.empty?
+
       @status_column_name = options[:column_name]
       @status_column_name ||= :status
 
@@ -81,9 +86,9 @@ module Manhattan
     def define_query_methods(status)
 
       status_sym                 = status.to_sym
-      query                      = "#{status}?".to_sym
-      negative_query             = "not_#{query}".to_sym
-      alternative_negatives      = ["un#{query}".to_sym, "in#{query}".to_sym]
+      query                      = "is_#{status}?".to_sym
+      negative_query             = "is_not_#{status}?".to_sym
+      alternative_negatives      = ["is_un#{status}?".to_sym, "is_in#{status}?".to_sym]
 
       define_method query do
         status_column_value == status_value(status_sym)

@@ -12,9 +12,8 @@ Gem::Specification.new do |gem|
   gem.summary       = "Extend your model with Manhattan, and enjoy a simple state machine and value accessors and queries"
   gem.homepage      = ""
 
-  gem.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  gem.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
-  gem.add_dependency "rails", "~> 3.2.10"
+  gem.add_dependency "rails", "~> 3.2"
 
-  gem.add_development_dependency "sqlite3"
 end
