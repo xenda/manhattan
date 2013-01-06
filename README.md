@@ -101,9 +101,9 @@ class ComicBook < ActiveRecord::Base
 ```
 
 ```ruby
-comic_book.mark_as_opened
-#=> "This is a sad day... when this comic loses its value"
-"WE CRY NOW AND SHIVER FOR IT'S NO LONGER COLLECTABLE"
+comic_book.mark_as_opened  #=>
+#"This is a sad day... when this comic loses its value"
+#"WE CRY NOW AND SHIVER FOR IT'S NO LONGER COLLECTABLE"
 ````
 
 #### Model scopes
