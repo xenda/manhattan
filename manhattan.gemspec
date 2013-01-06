@@ -1,9 +1,10 @@
-# -*- encoding: utf-8 -*-
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'manhattan/version'
+$:.push File.expand_path("../lib", __FILE__)
 
-Gem::Specification.new do |gem|
+# Maintain your gem's version:
+require "manhattan/version"
+
+# Describe your gem and declare its dependencies:
+Gem::Specification.new do |s|
   gem.name          = "manhattan"
   gem.version       = Manhattan::VERSION
   gem.authors       = ["Alvaro Pereyra"]
@@ -12,8 +13,9 @@ Gem::Specification.new do |gem|
   gem.summary       = "Extend your model with Manhattan, and enjoy a simple state machine and value accessors and queries"
   gem.homepage      = ""
 
-  gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ["lib"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+
+  s.add_dependency "rails", "~> 3.2.10"
+
+  s.add_development_dependency "sqlite3"
 end

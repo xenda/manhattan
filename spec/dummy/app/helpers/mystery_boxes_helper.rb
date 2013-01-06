@@ -1,0 +1,2 @@
+module MysteryBoxesHelper
+end

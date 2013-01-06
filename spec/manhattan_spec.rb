@@ -1,17 +1,16 @@
 require "spec_helper"
-require 'manhattan'
-require 'mysterious_box'
 
 describe Manhattan do
 
-  let(:box) { MysteriousBox.new }
+  let(:box) { MysteryBox.new }
+  let(:empty_box) { EmptyBox.new }
 
   it "creates a status map through the class method" do
     box.statuses.count.should be(3)
   end
 
   it "lists statuses" do
-    MysteriousBox.statuses.should eq(["opened", "closed", "glowing"])
+    MysteryBox.statuses.should eq(["opened", "closed", "glowing"])
   end
 
   it "creates query methods for each state" do
@@ -51,6 +50,23 @@ describe Manhattan do
       box.mark_as_glowing
     end
 
+    it "creates related scopes" do
+      MysteryBox.should respond_to(:opened)
+      MysteryBox.should respond_to(:closed)
+    end
+
+    it "queries through clases scopes" do
+      MysteryBox.opened.count.should eq(1)
+      MysteryBox.closed.count.should eq(0)
+    end
+
+  end
+
+  describe "when using alternate columns" do
+    it "takes the alternate column" do
+      empty_box.mark_as_opened
+      empty_box.state.should eq("opened")
+    end
   end
 
 
