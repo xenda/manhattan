@@ -3,35 +3,6 @@ require "manhattan/version"
 module Manhattan
 
   extend ActiveSupport::Concern
-  class AlreadyDefinedMethod < StandardError; end
-
-  def status_column_value
-    self.send(self.class.status_column_name)
-  end
-
-  def status_value(status)
-    self.class.status(status)
-  end
-
-  def statuses
-    self.class.statuses
-  end
-
-  def status_write_method
-    "#{self.class.status_column_name}="
-  end
-
-  def default_status_value
-    self.class.default_status_value
-  end
-
-  def send_if_exists(method)
-    self.send(method) if self.respond_to? method
-  end
-
-  def set_default_value
-    self.send(status_write_method, status_value(default_status_value)) unless self.status_column_value
-  end
 
   module ClassMethods
 
@@ -49,7 +20,7 @@ module Manhattan
 
       @status_column_name = options[:column_name]
       @default_status_value = options[:default_value]
-
+      @statuses = {}
       @statuses_names = localize_names(statuses)
 
       after_initialize :set_default_value
@@ -76,7 +47,6 @@ module Manhattan
     end
 
     def add_to_statuses_hash(status, index)
-      @statuses ||= {}
       @statuses[status] = @statuses_names[index]
     end
 
@@ -123,5 +93,39 @@ module Manhattan
     end
 
   end
+
+  def statuses
+    self.class.statuses
+  end
+
+  class AlreadyDefinedMethod < StandardError; end
+
+  def status_column_value
+    self.send(self.class.status_column_name)
+  end
+
+  private
+
+  def status_value(status)
+    self.class.status(status)
+  end
+
+  def status_write_method
+    "#{self.class.status_column_name}="
+  end
+
+  def default_status_value
+    self.class.default_status_value
+  end
+
+  def send_if_exists(method)
+    self.send(method) if self.respond_to? method
+  end
+
+  def set_default_value
+    self.send(status_write_method, status_value(default_status_value)) unless self.status_column_value
+  end
+
+
 
 end
