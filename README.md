@@ -23,31 +23,31 @@ Or install it yourself as:
 Models that want to be handled by Manhattan should include the gem on their definition:
 
 ```ruby
-    class ComicBook < ActiveRecord::Base
-      include Manhattan
-    end
+class ComicBook < ActiveRecord::Base
+  include Manhattan
+end
 ```
 
 Manhattan will then wait for your to describe the list of states your class can hold:
 
 ```ruby
-    class ComicBook < ActiveRecord::Base
-      include Manhattan
+class ComicBook < ActiveRecord::Base
+  include Manhattan
 
-      has_statuses :opened, :sold
+  has_statuses :opened, :sold
 
-    end
+end
 ```
 
 For it to do its work, it'll assume the model has a "status" column of type string on your database. This can be customized by appending the "column_name" key at the end of your states list: 
 
 ```ruby
-    class ComicBook < ActiveRecord::Base
-      include Manhattan
+class ComicBook < ActiveRecord::Base
+  include Manhattan
 
-      has_statuses :opened, :sold, column_name: :state
+  has_statuses :opened, :sold, column_name: :state
 
-    end
+end
 ```
 
 Manhattan will even allow you to setup a default state for initialized records. Take notice that this shouldn't be used instead of setting a default value on a migration or directly on your column.
@@ -57,28 +57,28 @@ After this setup, Manhattan will give you some love in the form of code
 #### Getting a list of status
 
 ```ruby
-    ComicBook.statuses        #=>  ["opened", "sold"]
-    ComicBook.new.statuses    #=>  ["opened", "sold"]
+ComicBook.statuses        #=>  ["opened", "sold"]
+ComicBook.new.statuses    #=>  ["opened", "sold"]
 ```
 
 #### Setting a new status
 
 ```ruby
-    comic_book = ComicBook.new
-    comic_book.mark_as_opened
-    comic_book.status          #=>  "opened"
+comic_book = ComicBook.new
+comic_book.mark_as_opened
+comic_book.status          #=>  "opened"
 ```
 
 #### Querying about its status
 
 ```ruby
-    # directly asking for status
-    comic_book.opened?         #=> "true"
-    comic_book.sold?           #=> "false"
+# directly asking for status
+comic_book.opened?         #=> "true"
+comic_book.sold?           #=> "false"
 
-    # or even asking about its negative
-    comic_book.unopened?      #=> "false"
-    comic_book.not_sold?      #=> "true"
+# or even asking about its negative
+comic_book.unopened?       #=> "false"
+comic_book.not_sold?       #=> "true"
 ```
 
 Manhattan will create alias like "invalid" "unsold" and "not_valid" for each state. Use whichever feels natural for your code.
@@ -88,22 +88,22 @@ Manhattan will create alias like "invalid" "unsold" and "not_valid" for each sta
 Manhattan will look for before_* and after_* methods for each state. If they exist, it will run them accordingly: 
 
 ```ruby
-    class ComicBook < ActiveRecord::Base
-      # .... all the above code
+class ComicBook < ActiveRecord::Base
+  # .... all the above code
 
-      def before_opened
-        puts "This is a sad day... when this comic loses its value"
-      end
+  def before_opened
+    puts "This is a sad day... when this comic loses its value"
+  end
 
-      def after_opened
-        puts "WE CRY NOW AND SHIVER FOR IT'S NO LONGER COLLECTABLE"
-      end
+  def after_opened
+    puts "WE CRY NOW AND SHIVER FOR IT'S NO LONGER COLLECTABLE"
+  end
 ```
 
 ```ruby
-    comic_book.mark_as_opened
-    #=> "This is a sad day... when this comic loses its value"
-    "WE CRY NOW AND SHIVER FOR IT'S NO LONGER COLLECTABLE"
+comic_book.mark_as_opened
+#=> "This is a sad day... when this comic loses its value"
+"WE CRY NOW AND SHIVER FOR IT'S NO LONGER COLLECTABLE"
 ````
 
 #### Model scopes
@@ -111,7 +111,7 @@ Manhattan will look for before_* and after_* methods for each state. If they exi
 Each model class has associated scopes created for easy returning records from the DB for each state:
 
 ```ruby
-  ComicBook.opened  #=>  select * from comic_books where status = 'opened'
+ComicBook.opened  #=>  select * from comic_books where status = 'opened'
 ```
 
 #### Adding a default state
@@ -119,16 +119,15 @@ Each model class has associated scopes created for easy returning records from t
 If wanted, you can setup a default state for your model
 
 ```ruby
-    class ComicBook < ActiveRecord::Base
-      include Manhattan
+class ComicBook < ActiveRecord::Base
+  include Manhattan
 
-      has_statuses :opened, :sold, default_value: :opened
-
-    end
+  has_statuses :opened, :sold, default_value: :opened
+end
 ```
 
 ```ruby
-  ComicBook.new.status #=>  "opened"
+ComicBook.new.status #=>  "opened"
 ```
 
 ## TODO
